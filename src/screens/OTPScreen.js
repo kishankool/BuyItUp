@@ -29,7 +29,7 @@ const OTPScreen = ({navigation}) => {
     try {
       // Make an API call to validate OTP
       if(otp === oneTimePassword){
-        navigation.navigate("RecipeList");
+        navigation.navigate("LocationScreen");
       }else{
         alert('Incorrect OTP');
       }
