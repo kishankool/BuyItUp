@@ -1,9 +1,11 @@
 import React,{useState,useEffect} from "react";
-import { View, Text,StyleSheet } from 'react-native';
+import { View, Text,StyleSheet,Pressable } from 'react-native';
+import { FontAwesome } from "@expo/vector-icons";
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-const CartScreen = ({}) => {
+const CartScreen = ({navigation}) => {
 
   const [cartItems, setCartItems] = useState 	([]);
 
@@ -25,14 +27,19 @@ const CartScreen = ({}) => {
 
   return (
     <>
-      <View style={styles.centered}><Text style={styles.title}>Loading location...</Text></View>
+      <View style={styles.centered}>
+      <Pressable style={{ flex: 1 , left: -150, top: 30  }} onPress={() => navigation.goBack()}>
+					<FontAwesome name={"arrow-circle-left"} size={28} color="white" />
+				</Pressable>
+      <Text style={styles.title}>Cart Items</Text>
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <View>
         {cartItems.map((item, index) => (
-          <Text key={index}>{item}</Text>
+          <Text key={index}>{index}. {item}</Text>
         ))}
       </View>
     </View>
+      </View>
     </>
   );
 };

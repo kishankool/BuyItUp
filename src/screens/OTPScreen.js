@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Alert , StyleSheet} from 'react-native';
 import axios from 'axios';
 
 const OTPScreen = ({navigation}) => {
@@ -41,7 +41,7 @@ const OTPScreen = ({navigation}) => {
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: "#ffc2c2" }}>
       <TextInput
         placeholder="Enter Phone Number"
         value={phoneNumber}
@@ -49,8 +49,8 @@ const OTPScreen = ({navigation}) => {
         keyboardType="phone-pad"
         style={{ marginBottom: 10, padding: 10, borderWidth: 1, borderColor: 'gray' }}
       />
-      <TouchableOpacity onPress={sendOTP} style={{ marginBottom: 20 }}>
-        <Text>Send OTP</Text>
+      <TouchableOpacity onPress={sendOTP} style={styles.appButtonContainer }>
+        <Text style={styles.appButtonText}>Send OTP</Text>
       </TouchableOpacity>
       <TextInput
         placeholder="Enter OTP"
@@ -59,11 +59,29 @@ const OTPScreen = ({navigation}) => {
         keyboardType="numeric"
         style={{ marginBottom: 10, padding: 10, borderWidth: 1, borderColor: 'gray' }}
       />
-      <TouchableOpacity onPress={validateOTP}>
-        <Text>Validate OTP</Text>
+      <TouchableOpacity onPress={validateOTP} style={styles.appButtonContainer}>
+        <Text style={styles.appButtonText}>Validate OTP</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
 export default OTPScreen;
+
+const styles = StyleSheet.create({
+  appButtonContainer: {
+    elevation: 8,
+    backgroundColor: "#009688",
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    marginBottom: 20 
+  },
+  appButtonText: {
+    fontSize: 18,
+    color: "#fff",
+    fontWeight: "bold",
+    alignSelf: "center",
+    textTransform: "uppercase"
+  }
+});

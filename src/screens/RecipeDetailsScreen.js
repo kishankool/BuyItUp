@@ -152,7 +152,8 @@ const RecipeDetailsScreen = ({ navigation, route }) => {
 							</View>
 							<View
 								style={{
-									backgroundColor: "rgba(255, 165, 0, 0.48)",
+									display: "flex",
+									flexDirection : "column",									backgroundColor: "rgba(255, 165, 0, 0.48)",
 									// paddingHorizontal: 16,
 									paddingVertical: 26,
 									borderRadius: 8,
@@ -160,21 +161,7 @@ const RecipeDetailsScreen = ({ navigation, route }) => {
 									width: 100,
 								}}
 							>
-								<Text style={{ fontSize: 40 }}>🔥</Text>
-								<Text style={{ fontSize: 20, fontWeight: 400 }}>
-									{item.calories}
-								</Text>
-							</View>
-							<View
-								style={{
-									backgroundColor: "rgba(255, 165, 0, 0.48)",
-									// paddingHorizontal: 16,
-									paddingVertical: 26,
-									borderRadius: 8,
-									alignItems: "center",
-									width: 100,
-								}}
-							>
+								<Text style={{ fontSize: 25 }}>🛒</Text>
 								<Pressable   onPress={() => addToCart(item.name)}>
 								<Text>Add To Cart</Text>
 								</Pressable>
