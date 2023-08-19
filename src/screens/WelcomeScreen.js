@@ -26,7 +26,7 @@ const WelcomeScreen = ({ navigation }) => {
 			</Text>
 
 			<TouchableOpacity
-				onPress={() => navigation.navigate("OTPScreen")}
+				onPress={() => navigation.navigate("RecipeList")}
 				style={{
 					backgroundColor: "#f96163",
 					borderRadius: 18,

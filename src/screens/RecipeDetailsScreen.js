@@ -7,12 +7,49 @@ import {
 	Pressable,
 	Dimensions,
 	ScrollView,
+	TouchableOpacity
 } from "react-native";
-import React from "react";
+import React,{useState,useEffect} from "react";
 import { FontAwesome } from "@expo/vector-icons";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import CartScreen from './CartScreen';
 
 const RecipeDetailsScreen = ({ navigation, route }) => {
 	const { item } = route.params;
+	const [cartItems, setCartItems] = useState 	([]);
+
+	
+	useEffect(() => {
+		loadCartItems();
+	  }, []);
+
+	const loadCartItems = async () => {
+			try {
+			const storedCartItems = await AsyncStorage.getItem('cartItems');
+			if (storedCartItems !== null) {
+				setCartItems(JSON.parse(storedCartItems));
+			}
+			} catch (error) {
+			console.error('Error loading cart items:', error);
+			}
+		};
+
+	const saveCartItems = async () => {
+		try {
+		  await AsyncStorage.setItem('cartItems', JSON.stringify(cartItems));
+		  alert(`${item.name} has been added to cart`);
+		  
+		} catch (error) {
+		  console.error('Error saving cart items:', error);
+		}
+		// console.log(cartItems);
+	  };
+	
+
+	const addToCart = (item) => {
+		cartItems.push(item);
+		saveCartItems();
+	  };
 
 	console.log(item);
 	return (
@@ -21,8 +58,11 @@ const RecipeDetailsScreen = ({ navigation, route }) => {
 				<Pressable style={{ flex: 1 }} onPress={() => navigation.goBack()}>
 					<FontAwesome name={"arrow-circle-left"} size={28} color="white" />
 				</Pressable>
-
-				<FontAwesome name={"heart-o"} size={28} color="white" />
+				<TouchableOpacity  onPress={() => addToCart(item.name)}></TouchableOpacity>
+				<TouchableOpacity onPress={() => navigation.navigate('Cart', { cartItems })}>
+					<Text>View Cart</Text>
+				</TouchableOpacity>	
+				{/* <FontAwesome name={"heart-o"} size={28} color="white" /> */}
 			</SafeAreaView>
 			<View
 				style={{
@@ -59,6 +99,8 @@ const RecipeDetailsScreen = ({ navigation, route }) => {
 				<Text style={{ marginTop: 150, fontSize: 28, fontWeight: "bold" }}>
 					{item.name}
 				</Text>
+
+
 
 				<View style={{ flex: 1 }}>
 					<ScrollView showsVerticalScrollIndicator={false}>
@@ -122,6 +164,23 @@ const RecipeDetailsScreen = ({ navigation, route }) => {
 								<Text style={{ fontSize: 20, fontWeight: 400 }}>
 									{item.calories}
 								</Text>
+							</View>
+							<View
+								style={{
+									backgroundColor: "rgba(255, 165, 0, 0.48)",
+									// paddingHorizontal: 16,
+									paddingVertical: 26,
+									borderRadius: 8,
+									alignItems: "center",
+									width: 100,
+								}}
+							>
+								<Pressable   onPress={() => addToCart(item.name)}>
+								<Text>Add To Cart</Text>
+								</Pressable>
+								<TouchableOpacity onPress={() => navigation.navigate('Cart')}>
+								<Text>View Cart</Text>
+							</TouchableOpacity>	
 							</View>
 						</View>
 

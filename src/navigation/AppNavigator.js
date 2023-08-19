@@ -7,6 +7,7 @@ import RecipeListScreen from "../screens/RecipeListScreen";
 import RecipeDetailsScreen from "../screens/RecipeDetailsScreen";
 import OTPScreen from "../screens/OTPScreen";
 import LocationCheckScreen from "../screens/LocationCheckScreen";
+import CartScreen from "../screens/CartScreen";
 
 const Stack = createNativeStackNavigator();
 const AppNavigator = () => {
@@ -18,6 +19,7 @@ const AppNavigator = () => {
 				<Stack.Screen name="RecipeDetail" component={RecipeDetailsScreen} />
 				<Stack.Screen name="OTPScreen" component={OTPScreen} />
 				<Stack.Screen name="LocationScreen" component={LocationCheckScreen} />
+				<Stack.Screen name="Cart" component={CartScreen} />
 			</Stack.Navigator>
 		</NavigationContainer>
 	);``
