@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from "react";
-import { View, Text } from 'react-native';
+import { View, Text,StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -25,7 +25,7 @@ const CartScreen = ({}) => {
 
   return (
     <>
-      <Text>Cart Screen</Text>
+      <View style={styles.centered}><Text style={styles.title}>Loading location...</Text></View>
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <View>
         {cartItems.map((item, index) => (
@@ -38,3 +38,20 @@ const CartScreen = ({}) => {
 };
 
 export default CartScreen;
+
+const styles = StyleSheet.create({
+  centered: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#ffc2c2",
+  },
+  title: {
+    fontSize: 18,
+    marginVertical: 2,
+  },
+  subtitle: {
+    fontSize: 14,
+    color: "#888",
+  },
+});

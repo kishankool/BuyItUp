@@ -1,77 +1,92 @@
+// LocationBasedShoppingApp.js
 import React, { useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text,StyleSheet } from 'react-native';
 import * as Location from 'expo-location';
 import RecipeListScreen from './RecipeListScreen';
+const LocationCheckScreen = ({navigation}) => {
+  const [userLocation, setUserLocation] = useState({latitude: '',longitude :''});
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    getLocationAsync();
+  }, []);
 
-const LocationCheckScreen = () => {
-    const [userLocation, setUserLocation] = useState(null);
-  
-    useEffect(() => {
-      getLocationAsync();
-    }, []);
-  
-    const getLocationAsync = async () => {
-      try {
-        const { status } = await Location.requestForegroundPermissionsAsync();
-        if (status === 'granted') {
-          const location = await Location.getCurrentPositionAsync({});
-          setUserLocation({
-            latitude: location.coords.latitude,
-            longitude: location.coords.longitude,
-          });
-        } else {
-          console.log('Location permission denied');
-        }
-      } catch (error) {
-        console.error('Error getting location:', error);
+  const getLocationAsync = async () => {
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status === 'granted') {
+        const location = await Location.getCurrentPositionAsync({});
+        console.log('location',location);
+        // r
+        userLocation.latitude = location.coords.latitude;
+        userLocation.longitude = location.coords.longitude;
+        console.log('locationafter',userLocation);
+        setLoading(false); // User location received, set loading to false
+      } else {
+        console.log('Location permission denied');
+        setLoading(false); // Location permission denied, set loading to false
       }
+    } catch (error) {
+      console.error('Error getting location:', error);
+      setLoading(false); // Error occurred, set loading to false
+    }
+  };
+
+  const isWithinRegion = (location) => {
+    // Define the latitude and longitude boundaries for each region
+    // Define the area codes for each region
+    const upBounds = {
+      minLat: 23.6345,
+      maxLat: 31.4665,
+      minLng: 77.0879,
+      maxLng: 84.0012,
     };
-  
-    const isWithinRegion = (location) => {
-      // Define the latitude and longitude boundaries for each region
-      const upBounds = {
-        minLat: 23.6345,
-        maxLat: 31.4665,
-        minLng: 77.0879,
-        maxLng: 84.0012,
-      };
-      const rjBounds = {
-        minLat: 23.0396,
-        maxLat: 30.1105,
-        minLng: 68.0410,
-        maxLng: 77.5848,
-      };
-      const wbBounds = {
-        minLat: 21.5422,
-        maxLat: 27.3251,
-        minLng: 85.7800,
-        maxLng: 89.8712,
-      };
-  
-      // Check if the user's location is within the boundaries of any region
-      return (
-        (location.latitude >= upBounds.minLat && location.latitude <= upBounds.maxLat) &&
-        (location.longitude >= upBounds.minLng && location.longitude <= upBounds.maxLng)
-      ) || (
-        (location.latitude >= rjBounds.minLat && location.latitude <= rjBounds.maxLat) &&
-        (location.longitude >= rjBounds.minLng && location.longitude <= rjBounds.maxLng)
-      ) || (
-        (location.latitude >= wbBounds.minLat && location.latitude <= wbBounds.maxLat) &&
-        (location.longitude >= wbBounds.minLng && location.longitude <= wbBounds.maxLng)
-      );
-    };
-  
     return (
-      <View style={{ flex: 1 }}>
-        {userLocation && isWithinRegion(userLocation) ? (
-          <RecipeListScreen userLocation={userLocation} />
-        ) : (
-          <Text>Location is not within the specified regions</Text>
-        )}
-      </View>
+      userLocation.latitude >= upBounds.minLat &&
+      userLocation.latitude <= upBounds.maxLat &&
+      userLocation.longitude >= upBounds.minLng &&
+      userLocation.longitude <= upBounds.maxLng
     );
   };
-  
-  export default LocationCheckScreen;
-  
+
+  if (loading) { 
+    return <View style={styles.centered}><Text style={styles.title}>Loading location...</Text></View>;
+  }
+
+  if (!userLocation) {
+    return <View style={styles.centered}><Text style={styles.title}>Could not retrieve location</Text></View>;
+  }
+
+  const region = isWithinRegion(userLocation);
+
+  return (
+    <View style={{ flex: 1 }}>
+      {loading ? (
+        <View style={styles.centered}><Text style={styles.title}>Loading location...</Text></View>
+      ) : region ? (
+        navigation.navigate("RecipeList")
+      ) : (
+        <View style={styles.centered}><Text style={styles.title}>You are not within the  location...</Text></View>
+      )}
+    </View>
+  );
+};
+
+export default LocationCheckScreen;
+
+const styles = StyleSheet.create({
+  centered: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#ffc2c2",
+  },
+  title: {
+    fontSize: 18,
+    marginVertical: 2,
+  },
+  subtitle: {
+    fontSize: 14,
+    color: "#888",
+  },
+});
